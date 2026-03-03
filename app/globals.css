@@ -269,3 +269,48 @@
     @apply transition-colors duration-300;
   }
 }
+
+/* TIP TAP TEXT EDITOR */
+
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.ProseMirror ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  padding-left: 1rem;
+  opacity: 0.9;
+}
+
+.ProseMirror pre {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+/* END TIP TAP TEXT EDITOR */

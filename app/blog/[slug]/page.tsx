@@ -1,5 +1,5 @@
 import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/home/navbar";
 import { RelatedPosts } from "@/components/related-posts";
 import { blogPosts, getBlogPostBySlug, getRelatedPosts } from "@/lib/blog-data";
 import { ChevronLeft, Clock, Share2 } from "lucide-react";

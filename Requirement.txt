@@ -1,0 +1,11 @@
+================Blog post model ================
+1. title
+2. content
+3. author (fixed MD Sami Alam)
+4. date (created at)
+5. tags
+6. image
+7. readTime
+
+
+
