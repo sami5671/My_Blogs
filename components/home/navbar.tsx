@@ -1,12 +1,14 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { ThemeToggle } from "../theme-toggle";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session, status } = useSession();
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -39,9 +41,28 @@ export function Navbar() {
         {/* Desktop Controls */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          <button className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-200 text-sm">
-            Subscribe
-          </button>
+          {session ? (
+            <div className="flex items-center gap-3">
+              <img
+                src={session.user?.image || "/default-avatar.png"}
+                alt={session.user?.name || "User"}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{session.user?.name}</span>
+              <button
+                onClick={() => signOut()}
+                className="px-4 py-2 rounded-full bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <button className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-200 text-sm">
+                Login
+              </button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -67,9 +88,31 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <button className="w-full mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg transition-all duration-200">
-              Subscribe
-            </button>
+
+            {session ? (
+              <div className="flex flex-col gap-2 mt-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={session.user?.image || "/default-avatar.png"}
+                    alt={session.user?.name || "User"}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{session.user?.name}</span>
+                </div>
+                <button
+                  onClick={() => signOut()}
+                  className="w-full px-6 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-all duration-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link href="/login">
+                <button className="w-full mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg transition-all duration-200">
+                  Login
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       )}
