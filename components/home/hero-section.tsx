@@ -1,8 +1,110 @@
-import { ArrowRight, Code2, Sparkles, Zap } from "lucide-react";
+"use client";
 
+import { cn } from "@/lib/utils";
+import { ArrowRight, Sparkles } from "lucide-react";
+import React, { forwardRef, useRef } from "react";
+import { AnimatedBeam } from "../ui/animated-beam";
+
+/* ---------------- Circle Component for Beam Dots ---------------- */
+const Circle = forwardRef<HTMLDivElement, { className?: string; children?: React.ReactNode }>(
+  ({ className, children }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "z-10 flex items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
+        className,
+      )}
+    >
+      <div className="w-12 h-12 flex items-center justify-center">{children}</div>
+    </div>
+  ),
+);
+
+Circle.displayName = "Circle";
+
+/* ---------------- Icons Used in Animated Beam ---------------- */
+const Icons = {
+  database: () => <img src="/database.png" alt="Database" className="w-full h-full object-cover rounded-full" />,
+  k6: () => <img src="/k6.png" alt="k6" className="w-full h-full object-cover rounded-full" />,
+  nextjs: () => <img src="/nextjs.png" alt="Next.js" className="w-full h-full object-cover rounded-full" />,
+  playwright: () => <img src="/playwright.png" alt="Playwright" className="w-full h-full object-cover rounded-full" />,
+  sdlc: () => <img src="/sdlc.png" alt="SDLC" className="w-full h-full object-cover rounded-full" />,
+  selenium: () => <img src="/selenium.png" alt="Selenium" className="w-full h-full object-cover rounded-full" />,
+  testing: () => <img src="/testing.gif" alt="Testing" className="w-full h-full object-cover rounded-full" />,
+};
+
+/* ---------------- Animated Beam Grid ---------------- */
+function AnimatedBeamGrid() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const div1Ref = useRef<HTMLDivElement>(null);
+  const div2Ref = useRef<HTMLDivElement>(null);
+  const div3Ref = useRef<HTMLDivElement>(null);
+  const div4Ref = useRef<HTMLDivElement>(null);
+  const div5Ref = useRef<HTMLDivElement>(null);
+  const div6Ref = useRef<HTMLDivElement>(null);
+  const div7Ref = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden" ref={containerRef}>
+      <div className="flex w-full max-w-lg flex-col items-stretch justify-between gap-10">
+        <div className="flex flex-row items-center justify-between">
+          <Circle ref={div1Ref}>
+            <Icons.database />
+          </Circle>
+          <Circle ref={div5Ref}>
+            <Icons.k6 />
+          </Circle>
+        </div>
+        <div className="flex flex-row items-center justify-between">
+          <Circle ref={div2Ref}>
+            <Icons.nextjs />
+          </Circle>
+          <Circle ref={div4Ref} className="w-16 h-16">
+            <Icons.testing />
+          </Circle>
+          <Circle ref={div6Ref}>
+            <Icons.sdlc />
+          </Circle>
+        </div>
+        <div className="flex flex-row items-center justify-between">
+          <Circle ref={div3Ref}>
+            <Icons.selenium />
+          </Circle>
+          <Circle ref={div7Ref} className="w-16 h-16">
+            <Icons.playwright />
+          </Circle>
+        </div>
+      </div>
+
+      {/* Beams */}
+      <AnimatedBeam containerRef={containerRef} fromRef={div1Ref} toRef={div4Ref} curvature={-75} endYOffset={-10} />
+      <AnimatedBeam containerRef={containerRef} fromRef={div2Ref} toRef={div4Ref} />
+      <AnimatedBeam containerRef={containerRef} fromRef={div3Ref} toRef={div4Ref} curvature={75} endYOffset={10} />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div5Ref}
+        toRef={div4Ref}
+        curvature={-75}
+        endYOffset={-10}
+        reverse
+      />
+      <AnimatedBeam containerRef={containerRef} fromRef={div6Ref} toRef={div4Ref} reverse />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div7Ref}
+        toRef={div4Ref}
+        curvature={75}
+        endYOffset={10}
+        reverse
+      />
+    </div>
+  );
+}
+
+/* ---------------- Main Hero Section ---------------- */
 export function HeroSection() {
   return (
-    <section className="hero-gradient min-h-[600px] flex items-center py-16">
+    <section className="hero-gradient min-h-[600px] flex items-center py-6 relative">
       <div className="max-w-6xl mx-auto px-4 w-full">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Text Content */}
@@ -12,13 +114,12 @@ export function HeroSection() {
               <span className="text-sm text-slate-300">Modern Insights for Tech Leaders</span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-              Explore Deep <span className="gradient-text">Technical Knowledge</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+              Explore knowledge of <span className="gradient-text">Software Testing & Web Dev</span>
             </h1>
 
-            <p className="text-xl text-slate-700 dark:text-slate-300 mb-8 leading-relaxed max-w-lg">
-              Comprehensive articles about AI, cloud architecture, performance optimization, and modern software
-              development practices.
+            <p className="text-lg text-slate-700 dark:text-slate-300 mb-8 leading-relaxed max-w-lg">
+              Comprehensive articles about Software Testing, Web Development, and Modern Software Engineering practices.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -51,26 +152,9 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Tech Icons - Grid */}
+          {/* Animated Beam Grid */}
           <div className="flex-1 hidden lg:flex items-center justify-center">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="glass-dark p-8 rounded-2xl flex flex-col items-center justify-center h-40 group hover:bg-slate-900/50 transition-all">
-                <Code2 size={40} className="text-blue-400 mb-4 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-slate-300">Cloud Native</span>
-              </div>
-              <div className="glass-dark p-8 rounded-2xl flex flex-col items-center justify-center h-40 group hover:bg-slate-900/50 transition-all">
-                <Zap size={40} className="text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-slate-300">High Performance</span>
-              </div>
-              <div className="glass-dark p-8 rounded-2xl flex flex-col items-center justify-center h-40 group hover:bg-slate-900/50 transition-all">
-                <Sparkles size={40} className="text-pink-400 mb-4 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-slate-300">AI Insights</span>
-              </div>
-              <div className="glass-dark p-8 rounded-2xl flex flex-col items-center justify-center h-40 group hover:bg-slate-900/50 transition-all">
-                <ArrowRight size={40} className="text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-slate-300">Best Practices</span>
-              </div>
-            </div>
+            <AnimatedBeamGrid />
           </div>
         </div>
       </div>

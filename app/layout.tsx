@@ -1,8 +1,10 @@
+import { Navbar } from "@/components/home/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LocaleProvider } from "@/context/LocalContext";
 import AuthProvider from "@/provider/AuthProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Footer } from "react-day-picker";
 import "./globals.css";
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -19,7 +21,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LocaleProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {/* Global Navbar */}
+              <Navbar />
+              {children}
+              {/* Global Footer */}
+              <Footer />
+            </AuthProvider>
           </LocaleProvider>
         </ThemeProvider>
       </body>
