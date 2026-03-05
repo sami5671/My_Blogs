@@ -6,10 +6,8 @@ import mongoose from "mongoose";
 import { notFound } from "next/navigation";
 
 export default async function PostPage({ params }: { params: Promise<{ id: string }> }) {
-  // ✅ Await params (Next.js 13 App Router fix)
   const { id } = await params;
 
-  // ✅ Prevent invalid ObjectId crash
   if (!mongoose.Types.ObjectId.isValid(id)) return notFound();
 
   await dbConnect();
@@ -17,69 +15,123 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
   const post = await PostModel.findById(id).lean();
   if (!post) return notFound();
 
-  // ✅ Fetch all blogs for sidebar
   const rawBlogs = await PostModel.find({}).sort({ createdAt: -1 }).lean();
 
-  // ✅ Convert _id to string
   const blogs = rawBlogs.map((blog) => ({
     ...blog,
     _id: blog._id.toString(),
   }));
 
   return (
-    <section className="hero-gradient min-h-screen py-20 px-4">
+    <section
+      className="
+      min-h-screen py-20 px-4
+      bg-gradient-to-b 
+      from-slate-50 via-white to-slate-100
+      dark:from-slate-950 dark:via-slate-900 dark:to-slate-950
+      "
+    >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* LEFT: Blog Content */}
+        {/* BLOG CONTENT */}
         <div className="lg:col-span-2">
-          <div className="backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-12">
-            {/* Category Badge */}
+          <div
+            className="
+            rounded-3xl p-8 md:p-12
+            
+            bg-white
+            dark:bg-slate-900/50
+            
+            border border-slate-200
+            dark:border-slate-700
+            
+            shadow-lg
+            dark:shadow-xl
+            
+            backdrop-blur-lg
+            "
+          >
+            {/* Category */}
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 text-sm font-semibold border border-blue-400/20">
+              <span
+                className="
+                inline-flex items-center gap-2
+                px-4 py-2 rounded-full
+                text-sm font-semibold
+                
+                bg-blue-100 text-blue-700
+                dark:bg-blue-500/20 dark:text-blue-300
+                "
+              >
                 <Tag size={16} />
                 {post.tags}
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <h1
+              className="
+              text-4xl md:text-5xl font-bold mb-6 leading-tight
+              text-slate-900 dark:text-white
+              "
+            >
               {post.title}
             </h1>
 
-            {/* Meta Info */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-300 mb-8 border-b border-white/10 pb-6">
+            {/* META INFO */}
+            <div
+              className="
+              flex flex-wrap items-center gap-6
+              text-sm
+              text-slate-600
+              dark:text-slate-400
+              mb-8 pb-6
+              border-b border-slate-200
+              dark:border-slate-700
+              "
+            >
               <div className="flex items-center gap-2">
-                <User size={18} className="text-blue-400" />
-                <span>{post.author}</span>
+                <User size={18} className="text-blue-500" />
+                {post.author}
               </div>
 
               <div className="flex items-center gap-2">
-                <CalendarDays size={18} className="text-purple-400" />
-                <span>{new Date(post.createdAt).toDateString()}</span>
+                <CalendarDays size={18} className="text-purple-500" />
+                {new Date(post.createdAt).toDateString()}
               </div>
 
               <div className="flex items-center gap-2">
-                <Clock size={18} className="text-pink-400" />
-                <span>{post.readTime} min read</span>
+                <Clock size={18} className="text-pink-500" />
+                {post.readTime} min read
               </div>
             </div>
 
-            {/* Cover Image */}
+            {/* COVER IMAGE */}
             {post.image && (
-              <div className="relative mb-10 rounded-2xl overflow-hidden shadow-xl border border-white/10">
+              <div className="mb-10 rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700">
                 <img src={post.image} alt={post.title} className="w-full h-[420px] object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               </div>
             )}
 
-            {/* Blog Content */}
+            {/* CONTENT */}
             <div
-              className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 prose-strong:text-white prose-a:text-blue-400 hover:prose-a:text-blue-300"
+              className="
+              prose prose-lg max-w-none
+
+              prose-headings:text-slate-900
+              prose-p:text-slate-700
+              prose-strong:text-slate-900
+              prose-a:text-blue-600
+
+              dark:prose-invert
+              dark:prose-headings:text-white
+              dark:prose-p:text-slate-300
+              "
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </div>
         </div>
 
-        {/* RIGHT: Sidebar */}
+        {/* SIDEBAR */}
         <div>
           <BlogSidebar blogs={blogs} currentPostId={id} />
         </div>

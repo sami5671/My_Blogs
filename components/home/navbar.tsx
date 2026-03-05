@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, PlusCircle, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,13 +8,12 @@ import { ThemeToggle } from "../theme-toggle";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Blog", href: "/#blog" },
     { label: "About", href: "/#about" },
-    { label: "Contact", href: "/#contact" },
   ];
 
   return (
@@ -41,6 +40,16 @@ export function Navbar() {
         {/* Desktop Controls */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
+
+          {session && (
+            <Link href="/create">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white text-sm font-semibold hover:shadow-lg hover:shadow-green-500/40 transition-all">
+                <PlusCircle size={16} />
+                Create Post
+              </button>
+            </Link>
+          )}
+
           {session ? (
             <div className="flex items-center gap-3">
               <img
@@ -48,7 +57,9 @@ export function Navbar() {
                 alt={session.user?.name || "User"}
                 className="w-8 h-8 rounded-full object-cover"
               />
+
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{session.user?.name}</span>
+
               <button
                 onClick={() => signOut()}
                 className="px-4 py-2 rounded-full bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
@@ -68,6 +79,7 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
+
           <button className="text-slate-700 dark:text-slate-300" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -89,6 +101,15 @@ export function Navbar() {
               </Link>
             ))}
 
+            {session && (
+              <Link href="/create-post">
+                <button className="w-full flex items-center justify-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:shadow-lg transition-all">
+                  <PlusCircle size={16} />
+                  Create Post
+                </button>
+              </Link>
+            )}
+
             {session ? (
               <div className="flex flex-col gap-2 mt-4">
                 <div className="flex items-center gap-3">
@@ -97,8 +118,10 @@ export function Navbar() {
                     alt={session.user?.name || "User"}
                     className="w-8 h-8 rounded-full object-cover"
                   />
+
                   <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{session.user?.name}</span>
                 </div>
+
                 <button
                   onClick={() => signOut()}
                   className="w-full px-6 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-all duration-200"
